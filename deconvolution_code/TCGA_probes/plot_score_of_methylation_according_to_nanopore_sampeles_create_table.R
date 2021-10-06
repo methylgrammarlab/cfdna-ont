@@ -22,6 +22,8 @@ data_on_files <- function(cur_file,sample_mapped,sample_name,tissue_file) {
 	
 	#score will be NA if data not exists (mainly LAML)
 	score_of_cpg <- nnls_score_of_cpg <- NA
+	
+	#this is to remove any probes with only zero or one values
 	cur_file <-cur_file[cur_file$FDR_adjust < pvalue & abs(cur_file$mean_diff) > diff_mean & !is.na(cur_file$FDR_adjust), ]
 	if (nrow(cur_file)>0) {
 		CpGs <- cur_file$CpGs_common
