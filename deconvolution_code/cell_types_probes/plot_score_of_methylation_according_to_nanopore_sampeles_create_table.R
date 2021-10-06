@@ -56,6 +56,8 @@ diff_mean=0 #as.numeric(args[3]) #0.3
 print(diff_mean)
 data_on_files <- function(cur_file_atlas,sample_mapped,cell_type,sample_name) {
 	cur_file <- data.frame(fread(file.path(output_dir,"atlas_joshCpGs_vs_healthy","t_test",paste0(cell_type,".csv"))))
+	
+	#this is to remove any probes with only zero or one values
 	cur_file <-cur_file[cur_file$FDR_adjust < pvalue & abs(cur_file$mean_diff) > diff_mean & !is.na(cur_file$FDR_adjust), ]
 	
 	CpGs <- unique(cur_file_atlas$acc) 
