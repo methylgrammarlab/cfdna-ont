@@ -1,0 +1,28 @@
+source,destination,color
+Monocytes EPIC,Monocytes,"#031EAB"
+B-cells EPIC,Lymphocytes,"#0432FF"
+CD4T-cells EPIC,Lymphocytes,"#0432FF"
+NK-cells EPIC,Lymphocytes,"#0432FF"
+CD8T-cells EPIC,Lymphocytes,"#0432FF"
+Neutrophils EPIC,Granulocytes,"#78ACFF"
+Erythrocyte progenitors,Megakaryocytes,"#FFD302"
+Adipocytes,,
+Cortical neurons,,
+Hepatocytes,Hepatocytes,"#FA2900"
+Lung cells,"Epithelial cells","#008000"
+Pancreatic beta cells,,
+Pancreatic acinar cells,,
+Pancreatic duct cells,"Epithelial cells","#008000"
+Vascular endothelial cells,Vascular endothelial cells,"#FB8376"
+Colon epithelial cells,"Epithelial cells","#008000"
+Left atrium,,
+Bladder,"Epithelial cells","#008000"
+Breast,"Epithelial cells","#008000"
+Head and neck larynx,"Epithelial cells","#008000"
+Kidney,"Epithelial cells","#008000"
+Prostate,"Epithelial cells","#008000"
+Thyroid,"Epithelial cells","#008000"
+Upper GI,"Epithelial cells","#008000"
+Uterus cervix,"Epithelial cells","#008000"
+
+
