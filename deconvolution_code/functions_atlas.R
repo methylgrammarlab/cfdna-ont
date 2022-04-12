@@ -252,15 +252,20 @@ plot_correlation <- function (data_to_plot,y_axis_data,x_axis_data,main_title,su
                label.x.npc = "right",
                vstep = 0.05) # sets vertical spacing
 	}
+	print("Efrat")
+	print(paste("in plot correlation ",levels(data_to_plot$category_for_color)))
 	if (isTRUE(color_by_category))
-		p <- p+geom_point(aes(color=category_for_color,size = as.numeric(num_reads)),alpha=0.5	)+  		 scale_size_continuous(range = c(6,18),limits=c(1000000,18000000),breaks=c(1000000,2000000,3000000,4000000,5000000,6000000), labels=c("1M","2M","3M","4M","5M",">6M"))+
+		p <- p+geom_point(data=data_to_plot[data_to_plot$category_for_color=="Cancer",],aes(color=category_for_color,size = as.numeric(num_reads)),alpha=0.8)+
+			geom_point(data=data_to_plot[data_to_plot$category_for_color!="Cancer",],aes(color=category_for_color,size = as.numeric(num_reads)),alpha=1)+  
+			   		
+		 scale_size_continuous(range = c(6,18),limits=c(1000000,18000000),breaks=c(1000000,2000000,3000000,4000000,5000000,6000000), labels=c("1M","2M","3M","4M","5M",">6M"))+
  # scale_size_continuous(range = c(5,11),breaks=c(4000000,8000000,12000000,16000000), labels=c("4M","8M","12M","16M"))+
 		labs(color="",size="Num reads (M)") +  guides(colour = guide_legend(override.aes = list(size=8),order=1))
 
 			#,breaks=c(3,6,9,12,15), labels=c("3-5M","6M","9M","12M","15M"))
 
 	else
-		p <- p+geom_point(aes(size=num_reads),alpha=0.5)+  scale_size_continuous(range = c(5, 11))
+		p <- p+geom_point(aes(size=num_reads),alpha=1)+  scale_size_continuous(range = c(5, 11))
 
 
 	return(p) 
@@ -355,7 +360,7 @@ plot_methylation_tumor_fractions_for_catergory <- function(all_table_methylation
 	print(levels(all_table_methylation_in_tissue$category))
 	p <- ggplot(all_table_methylation_in_tissue, aes(y=get(y_axis_data),
 		x=category,color=category_for_color,size = as.numeric(num_reads)))+
-			ggbeeswarm::geom_quasirandom(dodge.width=1, alpha=0.5, bandwidth = 3, varwidth = TRUE) +
+			ggbeeswarm::geom_quasirandom(dodge.width=1, alpha=1, bandwidth = 3, varwidth = TRUE) +
 			#geom_point(aes(color=category,size = num_reads),alpha=0.5)+  scale_size_continuous(range = c(5,10))+labs(color="",size="Num reads (M)") +    
 			#ggtitle(main_title,subtitle=sub_title)+
 			xlab(xlab)+
@@ -448,16 +453,17 @@ plot_fraction_tumor_vs_data <- function(all_table_methylation_in_tissue,main_tit
 	all_table_methylation_in_tissue <- prepare_data_to_plot(all_table_methylation_in_tissue,levels_list,sample_to_remove)
 	groups_for_plot <- levels(all_table_methylation_in_tissue$category_for_color)
 	if (isTRUE(original_nanopore_data)) {
-		all_table_methylation_in_tissue$category_for_color <- all_table_methylation_in_tissue$category
+		all_table_methylation_in_tissue$category_for_color <- factor(all_table_methylation_in_tissue$category,levels=levels_list)
 		groups_for_plot <- levels(factor(all_table_methylation_in_tissue$category))
 		# colors_for_plot <- colors_for_plot[c(3,4,5,2)]
-		colors_for_plot <- colors_for_plot[c(3,5,2)]
+		colors_for_plot <- colors_for_plot[c(5,2 ,3)]
 	}
 	print(groups_for_plot)
 	print(colors_for_plot)
 	if(isTRUE(add_arrows))
 		ylab="\n\n\n\n\n"
-	print(all_table_methylation_in_tissue)
+
+	print(all_table_methylation_in_tissue)#$category_for_color))
 	if ((length(sample_to_remove) == 0 || is.na(sample_to_remove)) && !isTRUE(original_nanopore_data)) 
 		colors_for_plot <-colors_for_plot[2:3]
 	p <- plot_correlation(data_to_plot=all_table_methylation_in_tissue,y_axis_data=y_axis_data,x_axis_data=x_axis_data,
@@ -465,7 +471,9 @@ plot_fraction_tumor_vs_data <- function(all_table_methylation_in_tissue,main_tit
 		plot_identity_line=plot_identity_line)#+
 		# scale_y_continuous(breaks=c(seq(0,0.55,0.1)),limits=c(0,0.55))+#values=c(0,0.1,0.2,0.3,0.4,0.5))#
 		# scale_x_continuous(breaks=c(seq(0,0.55,0.1)),limits=c(0,0.55))#values=c(0,0.1,0.2,0.3,0.4,0.5))#
-	print(p)
+	
+	print(rev(groups_for_plot))
+	print(rev(colors_for_plot))
 	p <- p + scale_color_manual(breaks = c(groups_for_plot),
 		values=c(colors_for_plot))
 		#theme(legend.position='none')
@@ -481,10 +489,10 @@ plot_fraction_tumor_vs_data <- function(all_table_methylation_in_tissue,main_tit
 		
 	if (isTRUE(original_nanopore_data))#original nanopore data
 	{
-		plot_width=7
-		p <- p + scale_size_continuous(range = c(6,18),limits=c(1000000,18000000),breaks=c(1000000,2000000,3000000,4000000,5000000,6000000), labels=c("1M","2M","3M","4M","5M",">6M"))+
-			labs(color="",size="Num reads (M)") +  
-			theme(legend.position='none')
+		plot_width=10.5
+		p <- p + scale_size_continuous(range = c(1,18),limits=c(1000000,18000000),breaks=c(1000000,2000000,3000000,4000000,5000000,6000000), labels=c("1M","2M","3M","4M","5M",">6M"))+
+			labs(color="",size="Num reads (M)") #+  
+			#theme(legend.position='none')
 			
 	}	
 	if(isTRUE(add_sample_label))
