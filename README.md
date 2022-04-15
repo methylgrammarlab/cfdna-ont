@@ -34,8 +34,8 @@ To plot the results, use the script: [plot_tumor_fractions_vs_score.R](https://g
 
 ## CTCF nucleosome positioning Heatmaps
 
-To produce the CTCF heatmaps we used the 9,780 evolutionarily conserved CTCF motifs occurring in distal ChIP-seq peaks, which were taken from (33). 
+To produce the CTCF heatmaps we used the 9,780 evolutionarily conserved CTCF motifs occurring in distal ChIP-seq peaks. 
 To get the coverage for the regions for each sample [deepTools](https://deeptools.readthedocs.io/en/develop/) (Version 3.5.0).
 
 [bamCoverage](https://deeptools.readthedocs.io/en/develop/content/tools/bamCoverage.html) was used with the parameters `--ignoreDuplicates --binSize -bl ENCODE_blacklist -of bedgraph --effectiveGenomeSize 2913022398 --normalizeUsing RPGC`. For Illumina WGS the additional parameter `--extendedReads 145` was used. The bedgraph was converted to a bigwig file using bigWigToBedGraph downloaded from UCSC Genome Browser. This bigwig file was passed to deepTools computeMatrix with the command line parameters `reference-point --referencePoint center -out table.out`, and the table.out file was imported into R to create fragment coverage heatmap using the [](https://github.com/methylgrammarlab/cfdna-ont/blob/main/heatmapOfCTCFrerun.R) script.
-For the tumor fraction annotation on the side of the plot, a table with the tumor fraction is needed (in this case ichorCNA was used to obtain the tumor fraction (21)). 
+For the tumor fraction annotation on the side of the plot, a table with the tumor fraction is needed (in this case ichorCNA was used to obtain the tumor fraction. 
