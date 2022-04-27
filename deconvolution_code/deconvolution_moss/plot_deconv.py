@@ -3,6 +3,8 @@
 ######################################################################################################################################################################
 # Portions of this file were adapted from https://github.com/nloyfer/meth_atlas/blob/master/deconvolve.py and any reuse of this code should include that attribution #
 ######################################################################################################################################################################
+
+############################ For Research Use only ############################
 import numpy as np
 import pandas as pd
 from scipy import optimize
