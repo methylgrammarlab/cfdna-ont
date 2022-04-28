@@ -18,7 +18,8 @@ The bedGraph file must then be mapped to the 450k Illumina human methylation arr
 
 To run Moss deconvolution on the samples: First, run [merge_all_samples_for_deconvolusion.R](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/deconvolution_moss/merge_all_samples_for_deconvolusion.R) in order to merge all samples into one table.
 
-Next, provide a reference atlas (this can be the original atlas that was used in the [Moss paper](https://www.nature.com/articles/s41467-018-07466-6#Sec13) [](https://github.com/nloyfer/meth_atlas/blob/master/reference_atlas.csv) or a similar reference. Such a reference was created using the script [feature_selection_function.m](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/cell_type_probes/creating_reference_atlas/feature_selection_function.m), using the command:
+Next, provide a reference atlas (this can be the original atlas that was used in the [Moss paper](https://www.nature.com/articles/s41467-018-07466-6#Sec13) [](https://github.com/nloyfer/meth_atlas/blob/master/reference_atlas.csv) or a similar reference. Such a reference was created using the script [feature_selection_function.m](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/cell_type_probes/creating_reference_atlas/feature_selection_function.m).
+To run the command, gunzip all files in the directory of the script, and then run the script using the command:
 `feature_selection_function(NUMBER_OF_CPGS)` from within MATLAB. 
 To format the output file for deconvolution, you can run the command:
 
