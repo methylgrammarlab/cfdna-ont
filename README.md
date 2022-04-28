@@ -18,7 +18,13 @@ The bedGraph file must then be mapped to the 450k Illumina human methylation arr
 
 To run Moss deconvolution on the samples: First, run [merge_all_samples_for_deconvolusion.R](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/deconvolution_moss/merge_all_samples_for_deconvolusion.R) in order to merge all samples into one table.
 
-Next, provide a reference atlas (this can be the original atlas that was used in the [Moss paper](https://www.nature.com/articles/s41467-018-07466-6#Sec13) [](https://github.com/nloyfer/meth_atlas/blob/master/reference_atlas.csv) or a similar reference, that was created following the description in the methods of the [Moss paper](https://www.nature.com/articles/s41467-018-07466-6#Sec13)), and run the deconvolution as explained in the [usage page](https://github.com/nloyfer/meth_atlas#usage). This will also create a plot of the deconvolution.
+Next, provide a reference atlas (this can be the original atlas that was used in the [Moss paper](https://www.nature.com/articles/s41467-018-07466-6#Sec13) [](https://github.com/nloyfer/meth_atlas/blob/master/reference_atlas.csv) or a similar reference. Such a reference was created using the script [feature_selection_function.m](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/cell_type_probes/creating_reference_atlas/feature_selection_function.m), using the command:
+`feature_selection_function(NUMBER_OF_CPGS)` from within MATLAB. 
+To format the output file for deconvolution, you can run the command:
+
+`cut -f 1,8- OUTPUT_ATLAS_FILE | tr -d "%" | awk ' { if(NR>1) for (i = 2; i <= NF; ++i) $i /= 100; print }' OFS='\t'  | tr "\t" "," > formatted_OUTPUT_ATLAS_FILE`
+
+Then, run the deconvolution with the file `formatted_OUTPUT_ATLAS_FILE` as a reference atlas along with the other arguments, as explained in the [usage page](https://github.com/nloyfer/meth_atlas#usage). This will also create a plot of the deconvolution.
 
 The script [plot_deconv.py](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/deconvolution_moss/plot_deconv.py) will plot the deconvolution results with some editing options different from the original. To plot the deconvolution results with fewer cell types, the script [deconvolution_plot.R](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/deconvolution_moss/deconvolution_plot.R) can be used, with or without a file with sample groups. An example group file is found [here](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/deconvolution_moss/group_file_for_plot_green_epithilial.csv).
 
