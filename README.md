@@ -6,7 +6,7 @@ To deconvolute the samples to cell types, the data must be in the bedGraph forma
 
 The bedGraph file must then be mapped to the 450k Illumina human methylation array, using a relevant manifest file that maps coordinates to the relevant probes. The manifest files for hg19 and hg38 assembly was uploaded to [deconvolution_code/Infinium_HumanMethylation450k_manifests](https://github.com/methylgrammarlab/cfdna-ont/tree/main/deconvolution_code/Infinium_HumanMethylation450k_manifests).
 
-To map a bedGraph file to the manifest file for a specific genome assembly, run:
+To map a bedGraph file to the 450k manifest file for a specific genome assembly, run:
 
 `bedtools intersect -a <(less illumina-methyl-450k-manifest.cgs.0based.ASSEMBLY.bed | bedtools slop -i stdin -r 1 -l 0 -g GENOME_CHR) -b <(zless YOUR_BEDGRAPH_FILE  | awk -v OFS="\t"  '{print $1,$2,$3,$4}' ) -wa -wb  | bedtools sort | bgzip -c > YOUR_BEDGRAPH_FILE_mapped_to_450k.bedgraph.gz`
 
@@ -34,7 +34,7 @@ To verify that the mapping of the bedGraph file to the 450k-manifest file is cor
 
 > **Warning**
 > If the file YOUR_BEDGRAPH_FILE_mapped_to_450k.bedgraph.gz is not about half C's half G's, the file probably doesn't overlap either strands, and need to be shifted to the right by 1bp: `bedtools shift -i YOUR_BEDGRAPH_FILE -g GENOME_CHR -s 1  > YOUR_BEDGRAPH_FILE_shifted`
-> And then re-run the mapping command above.
+> and then re-mapped to the mamifest file of the 450k array using the command above.
 > 
 > Where:
 > - YOUR_BEDGRAPH_FILE is your bedGraph file
