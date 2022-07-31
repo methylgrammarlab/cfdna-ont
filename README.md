@@ -2,8 +2,21 @@
 
 ## Preparation 
 
-To deconvolute the samples to cell types, the data must be in the bedGraph format containing  columns: chr, start, end, methylation_level.
-The bedGraph file must then be mapped to the 450k Illumina human methylation array, using a relevant manifest file that maps coordinates to the relevant probes. The file for the analysis should contain the columns:
+To deconvolute the samples to cell types, the data must be in the bedGraph format containing columns: chr, start, end, methylation_level.
+
+The bedGraph file must then be mapped to the 450k Illumina human methylation array, using a relevant manifest file that maps coordinates to the relevant probes. The manifest files for hg19 and hg38 assembly was uploaded to [deconvolution_code/Infinium_HumanMethylation450k_manifests](https://github.com/methylgrammarlab/cfdna-ont/tree/main/deconvolution_code/Infinium_HumanMethylation450k_manifests).
+
+To map a bedGraph file to the manifest file for a specific genome assembly, run:
+
+`bedtools intersect -a <(less illumina-methyl-450k-manifest.cgs.0based.ASSEMBLY.bed | bedtools slop -i stdin -r 1 -l 0 -g GENOME_CHR) -b <(zless YOUR_BEDGRAPH_FILE  | awk -v OFS="\t"  '{print $1,$2,$3,$4}' ) -wa -wb  | bedtools sort | bgzip -c > YOUR_BEDGRAPH_FILE_mapped_to_450k.bedgraph.gz`
+
+Where:
+- Replace ASSEMBLY with hg19 or hg38
+- YOUR_BEDGRAPH_FILE with the your file
+- GENOME_CHR is the sizes of the chromosomes in the relevant genome assembly, which can be retrieved with `mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -e	"select chrom, size from hg19.chromInfo"  > hg19.genome` 
+(Taken from: bedtools intersect help message)
+
+The file `YOUR_BEDGRAPH_FILE_mapped_to_450k.bedgraph.gz` for the analysis should contain the columns:
 1. chr
 2. start
 3. end
@@ -13,7 +26,16 @@ The bedGraph file must then be mapped to the 450k Illumina human methylation arr
 7. end
 8. methylation value
 
+To verify that the mapping of the bedGraph file to the 450k-manifest file is correct and strand specific, run bedtools getfasta to see that there are about half Cs and half Gs in the file:
 
+`zless YOUR_BEDGRAPH_FILE_mapped_to_450k.bedgraph.gz | awk -v OFS="\t" '{print $5,$6,$7,$8}' | bedtools getfasta -bed stdin -fi ASSEMBLY.fa | grep -v chr | sort | uniq -c`
+
+- Replace ASSEMBLY with hg19 or hg38
+
+> **Warning**
+
+> If the file YOUR_BEDGRAPH_FILE_mapped_to_450k.bedgraph.gz is not about half C's half G's, the file probably doesn't overlap either strands, and need to be shifted to the right by 1bp: `bedtools shift -i YOUR_BEDGRAPH_FILE -g GENOME_CHR -s 1  > YOUR_BEDGRAPH_FILE_shifted`
+ 
 ## Run Moss Deconvolution
 
 To run Moss deconvolution on the samples: First, run [merge_all_samples_for_deconvolusion.R](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/deconvolution_moss/merge_all_samples_for_deconvolusion.R) in order to merge all samples into one table.
