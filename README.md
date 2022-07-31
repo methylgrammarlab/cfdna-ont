@@ -11,8 +11,8 @@ To map a bedGraph file to the manifest file for a specific genome assembly, run:
 `bedtools intersect -a <(less illumina-methyl-450k-manifest.cgs.0based.ASSEMBLY.bed | bedtools slop -i stdin -r 1 -l 0 -g GENOME_CHR) -b <(zless YOUR_BEDGRAPH_FILE  | awk -v OFS="\t"  '{print $1,$2,$3,$4}' ) -wa -wb  | bedtools sort | bgzip -c > YOUR_BEDGRAPH_FILE_mapped_to_450k.bedgraph.gz`
 
 Where:
-- Replace ASSEMBLY with hg19 or hg38
-- YOUR_BEDGRAPH_FILE with the your file
+- ASSEMBLY is hg19 or hg38
+- YOUR_BEDGRAPH_FILE is your bedGraph file
 - GENOME_CHR is the sizes of the chromosomes in the relevant genome assembly, which can be retrieved with `mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -e	"select chrom, size from hg19.chromInfo"  > hg19.genome` 
 (Taken from: bedtools intersect help message)
 
@@ -33,12 +33,20 @@ To verify that the mapping of the bedGraph file to the 450k-manifest file is cor
 - Replace ASSEMBLY with hg19 or hg38
 
 > **Warning**
-
 > If the file YOUR_BEDGRAPH_FILE_mapped_to_450k.bedgraph.gz is not about half C's half G's, the file probably doesn't overlap either strands, and need to be shifted to the right by 1bp: `bedtools shift -i YOUR_BEDGRAPH_FILE -g GENOME_CHR -s 1  > YOUR_BEDGRAPH_FILE_shifted`
+> And then re-run the mapping command above.
+> 
+> Where:
+> - YOUR_BEDGRAPH_FILE is your bedGraph file
+> - GENOME_CHR is the sizes of the chromosomes in the relevant genome assembly, which can be retrieved with `mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -e	"select chrom, size from hg19.chromInfo"  > hg19.genome` 
+(Taken from: bedtools intersect help message)
+
  
 ## Run Moss Deconvolution
 
-To run Moss deconvolution on the samples: First, run [merge_all_samples_for_deconvolusion.R](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/deconvolution_moss/merge_all_samples_for_deconvolusion.R) in order to merge all samples into one table.
+To run Moss deconvolution on the samples: First, run [merge_all_samples_for_deconvolusion.R](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/deconvolution_moss/merge_all_samples_for_deconvolusion.R) in order to merge all samples into one table. 
+
+Make sure all your mapped bedGraph files are in the same directory. 
 
 Next, provide a reference atlas (this can be the original atlas that was used in the [Moss paper](https://www.nature.com/articles/s41467-018-07466-6#Sec13) [](https://github.com/nloyfer/meth_atlas/blob/master/reference_atlas.csv) or a similar reference. Such a reference was created using the script [feature_selection_function.m](https://github.com/methylgrammarlab/cfdna-ont/blob/main/deconvolution_code/cell_type_probes/creating_reference_atlas/feature_selection_function.m).
 To run the command, gunzip all files in the directory of the script, and then run the script using the command:
