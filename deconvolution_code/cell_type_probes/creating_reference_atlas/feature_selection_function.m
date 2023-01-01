@@ -18,7 +18,6 @@ A = A.data;
 [N,d] = size(A);
 fprintf('Atlas loaded (1/2) [%dx%d]\n',N,d);
 
-%	STD = importdata('STD.X1.LUMP0.7.csv',',',1); STD = STD.data;
 
 % read CpG information
 [~,chr,pos] = textread('CpGs.Illumina_450k.tab','%s%s%d%*[^\n]','headerlines',1,'delimiter','\t');
@@ -42,7 +41,6 @@ fprintf('Searching for 2x%d CpGs, with %dbp flanks, with additional %d pairwise 
 if 1,
     rng(6428049)
     I=find(var(A,[],2)>=0.001 & ~any(isnan(A),2));
-    % I=find(var(A,[],2)>=0.001 & ~any(isnan(A),2) & max(STD,[],2)<=0.15);
     if ncpgs==0,
 	S=find(~any(isnan(A),2));
     else
