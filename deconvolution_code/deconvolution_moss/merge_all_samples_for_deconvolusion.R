@@ -29,7 +29,7 @@ files_to_loop_empty <-lapply(files_to_loop,function(x) file.size(x)==28)
 
 all_data_frames <- lapply(files_to_loop[unlist(files_to_loop_not_empty)], function(x) { 
 	# cur_sample <- fread(x)[,c(4,5,6,7,8)]
-	cur_sample <-fread(x,colClasses = c('V4'='character'))[,c(4,5,6,7,8)]
+	cur_sample <- data.frame(fread(x,colClasses = c('V4'='character'))[,c(4,5,6,7,8)])
 	colnames(cur_sample) <- c("CpGs", "chr","start","end",sub(args$pattern,"",basename(x)))
 	if (!grepl("cg",cur_sample$CpGs[1])) #column doesn't starts with cg
 		cur_sample$CpGs <- sub("^","cg",cur_sample$CpGs)	
