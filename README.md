@@ -4,7 +4,7 @@
 
 To deconvolute the samples to cell types, the data must be in the bedGraph format containing columns: chr, start, end, methylation_level.
 
-The bedGraph file must then be mapped to the 450k Illumina human methylation array, using a relevant manifest file that maps coordinates to the relevant probes. The manifest files for hg19 and hg38 assembly was uploaded to [deconvolution_code/Infinium_HumanMethylation450k_manifests](https://github.com/methylgrammarlab/cfdna-ont/tree/main/deconvolution_code/Infinium_HumanMethylation450k_manifests).
+The bedGraph file must then be mapped to the 450k Illumina human methylation array, using a relevant manifest file that maps coordinates to the relevant probes. The manifest files for hg19 and hg38 assembly were uploaded to [deconvolution_code/Infinium_HumanMethylation450k_manifests](https://github.com/methylgrammarlab/cfdna-ont/tree/main/deconvolution_code/Infinium_HumanMethylation450k_manifests).
 
 To map a bedGraph file to the 450k manifest file for a specific genome assembly, run:
 
